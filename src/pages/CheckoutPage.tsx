@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
@@ -12,6 +12,7 @@ const CheckoutPage = () => {
   const { items, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
   const [orderComplete, setOrderComplete] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
   
   const subtotal = getCartTotal();
   const shipping = items.length > 0 ? 10.00 : 0;
@@ -26,7 +27,9 @@ const CheckoutPage = () => {
     clearCart();
     
     // Reset form
-    e.currentTarget.reset();
+    if (formRef.current) {
+      formRef.current.reset();
+    }
   };
   
   // If cart is empty and not showing order completion screen, redirect to cart
@@ -84,7 +87,7 @@ const CheckoutPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Checkout form */}
             <div className="lg:col-span-2">
-              <form onSubmit={handleSubmit}>
+              <form ref={formRef} onSubmit={handleSubmit}>
                 {/* Contact information */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-6">
                   <h2 className="font-medium mb-4">Contact Information</h2>

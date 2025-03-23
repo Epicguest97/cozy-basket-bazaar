@@ -9,9 +9,10 @@ import { useCart } from '@/context/CartContext';
 interface ProductCardProps {
   product: Product;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, className }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, className, style }) => {
   const { addToCart } = useCart();
   
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -21,10 +22,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, className }) => {
   };
 
   return (
-    <div className={cn(
-      'group relative overflow-hidden rounded-xl bg-white dark:bg-gray-900 transition-all duration-300 hover:shadow-md',
-      className
-    )}>
+    <div 
+      className={cn(
+        'group relative overflow-hidden rounded-xl bg-white dark:bg-gray-900 transition-all duration-300 hover:shadow-md',
+        className
+      )}
+      style={style}
+    >
       <Link to={`/product/${product.id}`} className="block">
         <div className="relative aspect-square overflow-hidden">
           <img 
