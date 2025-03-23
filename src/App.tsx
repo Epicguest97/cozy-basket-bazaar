@@ -12,14 +12,22 @@ import CheckoutPage from "./pages/CheckoutPage";
 import NotFound from "./pages/NotFound";
 import { CartProvider } from "./context/CartContext";
 
-const queryClient = new QueryClient();
+// Create a new QueryClient instance
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000, // 1 minute
+      retry: 1,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <CartProvider>
         <Toaster />
-        <Sonner />
+        <Sonner position="top-right" closeButton />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />

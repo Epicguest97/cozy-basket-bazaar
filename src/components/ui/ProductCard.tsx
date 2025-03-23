@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { PlusCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: Product;
@@ -21,6 +22,29 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, className, style }) 
     addToCart(product, 1);
   };
 
+  const trackProductClick = useCallback(() => {
+    // Log the click event
+    console.log(`Product clicked: ${product.id} - ${product.name}`);
+    
+    // In the future, this would send data to a backend API
+    const clickData = {
+      productId: product.id,
+      productName: product.name,
+      timestamp: new Date().toISOString(),
+      userId: 'anonymous' // This would be replaced with actual user ID when auth is implemented
+    };
+    
+    // Store click data in localStorage for now (simulating a backend)
+    const productClicks = JSON.parse(localStorage.getItem('productClicks') || '[]');
+    productClicks.push(clickData);
+    localStorage.setItem('productClicks', JSON.stringify(productClicks));
+    
+    // Notify with toast for demonstration purposes
+    toast.info(`Click on ${product.name} tracked`, {
+      duration: 1500,
+    });
+  }, [product]);
+
   return (
     <div 
       className={cn(
@@ -29,7 +53,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, className, style }) 
       )}
       style={style}
     >
-      <Link to={`/product/${product.id}`} className="block">
+      <Link 
+        to={`/product/${product.id}`} 
+        className="block"
+        onClick={trackProductClick}
+      >
         <div className="relative aspect-square overflow-hidden">
           <img 
             src={product.images[0]} 
